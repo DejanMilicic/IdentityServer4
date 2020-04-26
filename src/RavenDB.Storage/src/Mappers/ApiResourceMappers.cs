@@ -17,5 +17,10 @@ namespace IdentityServer4.RavenDB.Mappers
         {
             return model == null ? null : Mapper.Map<ApiResource>(model);
         }
+
+        public static Models.ApiResource ToModel(this ApiResource entity)
+        {
+            return entity == null ? null : Mapper.Map<Models.ApiResource>(entity);
+        }
     }
 }

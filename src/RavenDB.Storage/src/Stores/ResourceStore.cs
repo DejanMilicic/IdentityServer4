@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer4.Models;
+using IdentityServer4.RavenDB.Mappers;
 using IdentityServer4.Stores;
 using Microsoft.Extensions.Logging;
+using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 
 namespace IdentityServer4.RavenDB.Storage.Stores
@@ -39,9 +42,26 @@ namespace IdentityServer4.RavenDB.Storage.Stores
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<ApiResource>> FindApiResourcesByNameAsync(IEnumerable<string> apiResourceNames)
+        public virtual async Task<IEnumerable<ApiResource>> FindApiResourcesByNameAsync(IEnumerable<string> apiResourceNames)
         {
-            throw new NotImplementedException();
+            if (apiResourceNames == null) throw new ArgumentNullException(nameof(apiResourceNames));
+
+            var query =
+                Session.Query<Entities.ApiResource>()
+                    .Where(apiResource => apiResourceNames.Contains(apiResource.Name));
+
+            ApiResource[] result = query.ToArray().Select(x => x.ToModel()).ToArray();
+
+            if (result.Any())
+            {
+                Logger.LogDebug("Found {apis} API resource in database", result.Select(x => x.Name));
+            }
+            else
+            {
+                Logger.LogDebug("Did not find {apis} API resource in database", apiResourceNames);
+            }
+
+            return result;
         }
 
         public Task<Resources> GetAllResourcesAsync()
