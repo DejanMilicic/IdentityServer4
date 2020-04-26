@@ -2,10 +2,8 @@
 
 namespace IdentityServer4.RavenDB.Entities
 {
-    public abstract class Secret
+    public class Secret
     {
-        public string Id { get; set; }
-
         public string Description { get; set; }
 
         public string Value { get; set; }
