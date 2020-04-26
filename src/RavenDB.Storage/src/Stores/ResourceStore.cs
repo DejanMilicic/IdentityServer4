@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using IdentityServer4.Models;
 using IdentityServer4.Stores;
+using Microsoft.Extensions.Logging;
+using Raven.Client.Documents.Session;
 
 namespace IdentityServer4.RavenDB.Storage.Stores
 {
@@ -12,6 +14,16 @@ namespace IdentityServer4.RavenDB.Storage.Stores
     /// <seealso cref="IdentityServer4.Stores.IResourceStore" />
     public class ResourceStore : IResourceStore
     {
+        protected readonly IDocumentSession Session;
+
+        protected readonly ILogger<ResourceStore> Logger;
+
+        public ResourceStore(IDocumentSession session, ILogger<ResourceStore> logger)
+        {
+            Session = session;
+            Logger = logger;
+        }
+
         public Task<IEnumerable<IdentityResource>> FindIdentityResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
         {
             throw new NotImplementedException();

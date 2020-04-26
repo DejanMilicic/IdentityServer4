@@ -1,6 +1,6 @@
 ﻿namespace IdentityServer4.RavenDB.IntegrationTests.Stores
 {
-    public class ResourceStoreTests
+    public class ResourceStoreTests : IntegrationTest
     {
     }
 }
