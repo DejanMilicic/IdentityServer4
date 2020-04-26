@@ -6,7 +6,7 @@ using IdentityServer4.Models;
 using IdentityServer4.RavenDB.Mappers;
 using IdentityServer4.Stores;
 using Microsoft.Extensions.Logging;
-using Raven.Client.Documents;
+using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
 
 namespace IdentityServer4.RavenDB.Storage.Stores
@@ -48,7 +48,7 @@ namespace IdentityServer4.RavenDB.Storage.Stores
 
             var query =
                 Session.Query<Entities.ApiResource>()
-                    .Where(apiResource => apiResourceNames.Contains(apiResource.Name));
+                    .Where(apiResource => apiResource.Name.In(apiResourceNames));
 
             ApiResource[] result = query.ToArray().Select(x => x.ToModel()).ToArray();
 
