@@ -6,6 +6,7 @@ using IdentityServer4.Models;
 using IdentityServer4.RavenDB.Mappers;
 using IdentityServer4.Stores;
 using Microsoft.Extensions.Logging;
+using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
 
@@ -17,11 +18,11 @@ namespace IdentityServer4.RavenDB.Storage.Stores
     /// <seealso cref="IdentityServer4.Stores.IResourceStore" />
     public class ResourceStore : IResourceStore
     {
-        protected readonly IDocumentSession Session;
+        protected readonly IAsyncDocumentSession Session;
 
         protected readonly ILogger<ResourceStore> Logger;
 
-        public ResourceStore(IDocumentSession session, ILogger<ResourceStore> logger)
+        public ResourceStore(IAsyncDocumentSession session, ILogger<ResourceStore> logger)
         {
             Session = session;
             Logger = logger;
@@ -50,7 +51,7 @@ namespace IdentityServer4.RavenDB.Storage.Stores
                 Session.Query<Entities.ApiResource>()
                     .Where(apiResource => apiResource.Name.In(apiResourceNames));
 
-            ApiResource[] result = query.ToArray().Select(x => x.ToModel()).ToArray();
+            ApiResource[] result = (await query.ToArrayAsync()).Select(x => x.ToModel()).ToArray();
 
             if (result.Any())
             {

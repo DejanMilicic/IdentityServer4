@@ -43,7 +43,7 @@ namespace IdentityServer4.RavenDB.IntegrationTests.Stores
                 WaitForUserToContinueTheTest(ravenStore);
 
                 ApiResource foundResource;
-                using (var session = ravenStore.OpenSession())
+                using (var session = ravenStore.OpenAsyncSession())
                 {
                     var store = new ResourceStore(session, FakeLogger<ResourceStore>.Create());
                     foundResource = (await store.FindApiResourcesByNameAsync(new[] { resource.Name })).SingleOrDefault();
