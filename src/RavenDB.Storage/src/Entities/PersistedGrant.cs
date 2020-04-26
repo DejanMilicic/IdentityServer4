@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IdentityServer4.RavenDB.Storage.Entities
+namespace IdentityServer4.RavenDB.Entities
 {
     public class PersistedGrant
     {
