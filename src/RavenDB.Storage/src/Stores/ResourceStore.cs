@@ -47,6 +47,9 @@ namespace IdentityServer4.RavenDB.Storage.Stores
         {
             if (apiResourceNames == null) throw new ArgumentNullException(nameof(apiResourceNames));
 
+            // todo : pay attention to staleness of indexes
+            // OnBeforeQuery - attach there and ask to wait for non-stale index
+
             var query =
                 Session.Query<Entities.ApiResource>()
                     .Where(apiResource => apiResource.Name.In(apiResourceNames));
